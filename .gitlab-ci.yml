@@ -2,8 +2,8 @@
 image: node:20
 
 variables:
-  NODE_ENV: production
-  # helps when builds get large; safe to keep
+  # Ensure devDependencies are installed (vite, @vitejs/plugin-react, etc.)
+  NPM_CONFIG_PRODUCTION: "false"
   NODE_OPTIONS: --max_old_space_size=4096
 
 cache:
@@ -16,10 +16,10 @@ stages: [deploy]
 pages:
   stage: deploy
   script:
-    # Install deps
+    # Install deps (with dev deps)
     - if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
-    # Build (expects "build" script in package.json to run `vite build`)
+    # Build (expects "build": "vite build" in package.json)
     - npm run build
 
     # GitLab Pages expects ./public as artifact root
@@ -35,5 +35,4 @@ pages:
     expire_in: 1 week
 
   rules:
-    # Deploy only from default branch (usually "main")
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
