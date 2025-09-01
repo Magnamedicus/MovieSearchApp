@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
-import "../css/NavBar.css";
+import "../css/Navbar.css";
 
 export default function NavBar() {
   // Theme toggle (persists + respects system)
