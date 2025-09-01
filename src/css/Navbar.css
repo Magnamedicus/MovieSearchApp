@@ -1,0 +1,304 @@
+/* ===== Theme tokens ===== */
+:root {
+  --nav-bg: rgba(18, 18, 22, 0.55);
+  --nav-fg: #f5f7ff;
+  --nav-muted: #aab3c5;
+  --nav-accent-1: #7c4dff; /* violet */
+  --nav-accent-2: #00e5ff; /* cyan */
+  --nav-accent-3: #00ff95; /* mint */
+  --nav-border: rgba(255,255,255,0.14);
+  --nav-shadow: 0 12px 50px rgba(0,0,0,0.38);
+  --nav-ink: linear-gradient(90deg, var(--nav-accent-2), var(--nav-accent-1));
+  --nav-radius: 16px;
+
+  /* Sizing for bigger controls */
+  --nav-pad-y: 0.9rem;
+  --nav-pad-x: 1.25rem;
+  --link-pad-y: 0.65rem;
+  --link-pad-x: 1.0rem;
+  --link-font: 1.04rem;
+  --icon-btn: 78px;  /* theme + hamburger */
+}
+
+:root[data-theme="light"] {
+  --nav-bg: rgba(255,255,255,0.72);
+  --nav-fg: #0e1320;
+  --nav-muted: #475069;
+  --nav-border: rgba(0,0,0,0.12);
+  --nav-shadow: 0 10px 36px rgba(30,34,42,0.18);
+  --nav-ink: linear-gradient(90deg, #0ea5e9, #7c3aed);
+}
+
+/* ===== Container ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  background: var(--nav-bg);
+  color: var(--nav-fg);
+  border-bottom: 1px solid var(--nav-border);
+  box-shadow: var(--nav-shadow);
+  isolation: isolate;
+}
+
+.nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: var(--nav-radius);
+  background:
+    conic-gradient(from 180deg at 50% 50%,
+      var(--nav-accent-2),
+      var(--nav-accent-1),
+      var(--nav-accent-3),
+      var(--nav-accent-2));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.25;
+}
+
+.nav__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--nav-pad-y) var(--nav-pad-x);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+/* ===== Aurora background ===== */
+.nav__aurora {
+  position: absolute;
+  inset: -20px 0 auto;
+  height: 180%;
+  background:
+    radial-gradient(1200px 300px at 10% -20%, rgba(0, 229, 255, .15), transparent 60%),
+    radial-gradient(800px 240px at 80% -40%, rgba(124, 77, 255, .18), transparent 60%),
+    radial-gradient(600px 240px at 50% -30%, rgba(0, 255, 149, .18), transparent 60%);
+  filter: blur(22px);
+  z-index: -1;
+  pointer-events: none;
+  animation: aurora 18s linear infinite alternate;
+  opacity: .9;
+}
+@keyframes aurora {
+  0%   { transform: translateY(0) translateX(0) scale(1); }
+  50%  { transform: translateY(-10%) translateX(2%) scale(1.03); }
+  100% { transform: translateY(0) translateX(-2%) scale(1); }
+}
+
+/* ===== Brand ===== */
+.nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  text-decoration: none;
+  color: var(--nav-fg);
+  transform: translateZ(0);
+}
+
+.nav__brandIcon {
+  font-size: 1.45rem;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.3));
+}
+
+/* Dark theme: brand text is WHITE */
+.nav__brandText {
+  font-weight: 900;
+  letter-spacing: .4px;
+  color: var(--nav-fg);
+  font-size: 1.25rem;
+}
+
+/* Light theme: gradient brand text */
+[data-theme="light"] .nav__brandText {
+  background: linear-gradient(90deg, var(--nav-accent-2), var(--nav-accent-1));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ===== Links (Option A: pill base for BOTH links) ===== */
+.nav__links {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.nav__link {
+  --pad-x: var(--link-pad-x);
+  --pad-y: var(--link-pad-y);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  text-decoration: none;
+  color: var(--nav-fg);
+  padding: var(--pad-y) var(--pad-x);
+  border-radius: 999px;
+  transform: translateZ(0);
+  transition: transform .15s ease, background .2s ease, box-shadow .2s ease, border-color .2s ease;
+  font-size: var(--link-font);
+  line-height: 1.2;
+
+  /* Pill base so Home & Favorites match even when inactive */
+  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+  border: 1px solid var(--nav-border);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+
+[data-theme="light"] .nav__link {
+  background: linear-gradient(180deg, rgba(0,0,0,.03), rgba(0,0,0,.01));
+}
+
+.nav__link span { position: relative; z-index: 1; }
+
+.nav__link:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+  box-shadow: 0 10px 28px rgba(0,0,0,.18), inset 0 0 0 1px rgba(255,255,255,.10);
+}
+
+/* Animated underline */
+.nav__ink {
+  position: absolute;
+  left: var(--pad-x);
+  right: var(--pad-x);
+  bottom: 4px;
+  height: 3px;
+  background: var(--nav-ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .28s ease;
+  border-radius: 3px;
+}
+.nav__link:hover .nav__ink,
+.nav__link--active .nav__ink {
+  transform: scaleX(1);
+}
+
+/* Active state = stronger fill + glow */
+.nav__link--active {
+  background: linear-gradient(120deg, rgba(255,255,255,.18), rgba(255,255,255,.10));
+  box-shadow:
+    0 14px 34px rgba(0,0,0,.22),
+    0 0 0 1px rgba(255,255,255,.16),
+    0 0 18px -2px var(--nav-accent-1);
+}
+
+/* ===== Theme button (bigger) ===== */
+.nav__themeBtn {
+  justify-self: end;
+  display: grid;
+  place-items: center;
+  width: var(--icon-btn);
+  height: var(--icon-btn);
+  border-radius: 12px;
+  border: 1px solid var(--nav-border);
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+  color: var(--nav-fg);
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+}
+.nav__themeBtn:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 12px 34px rgba(0,0,0,.22), inset 0 0 0 1px rgba(255,255,255,.14);
+}
+
+/* ===== Hamburger (bigger) ===== */
+.nav__toggle { display: none; }
+
+.nav__hamburger {
+  display: none;
+  width: var(--icon-btn);
+  height: var(--icon-btn);
+  border-radius: 12px;
+  border: 1px solid var(--nav-border);
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+.nav__hamburger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 34px rgba(0,0,0,.22);
+}
+.nav__hamburger span {
+  width: 22px;
+  height: 2.5px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 820px) {
+  .nav__inner { grid-template-columns: auto auto auto; }
+  .nav__hamburger { display: inline-flex; }
+
+  .nav__links {
+    position: absolute;
+    top: 100%;
+    left: 8px;
+    right: 8px;
+    display: grid;
+    gap: .7rem;
+    background: var(--nav-bg);
+    border: 1px solid var(--nav-border);
+    border-top: none;
+    border-radius: 0 0 var(--nav-radius) var(--nav-radius);
+    backdrop-filter: blur(16px) saturate(130%);
+    padding: .8rem;
+    transform-origin: top;
+    transform: perspective(900px) rotateX(-90deg);
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: var(--nav-shadow);
+  }
+
+  .nav__toggle:checked ~ .nav__links {
+    transform: perspective(900px) rotateX(0deg);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Hamburger -> X */
+  .nav__toggle:checked + .nav__hamburger span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav__toggle:checked + .nav__hamburger span:nth-child(2) { opacity: 0; }
+  .nav__toggle:checked + .nav__hamburger span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .nav__links .nav__link {
+    justify-content: center;
+    padding: calc(var(--link-pad-y) + .1rem) calc(var(--link-pad-x) + .25rem);
+    font-size: calc(var(--link-font) * 1.02);
+  }
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .nav, .nav__links, .nav__themeBtn, .nav__hamburger,
+  .nav__aurora, .nav__link .nav__ink {
+    animation: none !important;
+    transition: none !important;
+  }
+  .nav__aurora { display: none; }
+}
+
+/* Dark mode: make Home/Favorites text pure white on hover */
+[data-theme="dark"] .nav__link:hover,
+[data-theme="dark"] .nav__link:focus-visible {
+  color: #fff;
+}
